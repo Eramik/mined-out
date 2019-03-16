@@ -6,7 +6,8 @@ namespace Mined_Out
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Field f = new Field();
+            f.PrintToConsole();
         }
     }
 }

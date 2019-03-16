@@ -1,0 +1,11 @@
+/home/denis/projects/Mined-Out/bin/Debug/netcoreapp2.2/Mined-Out.deps.json
+/home/denis/projects/Mined-Out/bin/Debug/netcoreapp2.2/Mined-Out.runtimeconfig.json
+/home/denis/projects/Mined-Out/bin/Debug/netcoreapp2.2/Mined-Out.runtimeconfig.dev.json
+/home/denis/projects/Mined-Out/bin/Debug/netcoreapp2.2/Mined-Out.dll
+/home/denis/projects/Mined-Out/bin/Debug/netcoreapp2.2/Mined-Out.pdb
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.csprojAssemblyReference.cache
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.csproj.CoreCompileInputs.cache
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.AssemblyInfoInputs.cache
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.AssemblyInfo.cs
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.dll
+/home/denis/projects/Mined-Out/obj/Debug/netcoreapp2.2/Mined-Out.pdb
