@@ -7,12 +7,25 @@ namespace Mined_Out {
             this.i = i;
             this.j = j;
         }
-        public int i {private set; get;}
-        public int j {private set; get;}
+        public int i {set; get;}
+        public int j {set; get;}
     }
-
+    public enum Direction {
+        Up,
+        Right,
+        Left,
+        Down
+    }
+    public enum Event {
+        Boom,
+        Step,
+        Nothing
+    }
     public class Field {
         private Cell[,] field;
+        private Path playerCell {get {
+            return (Path)field[playerCoords.i, playerCoords.j];
+        }}
         private Coords playerCoords;
         public Field() {
             this.field = new Cell[7,7];
@@ -51,6 +64,49 @@ namespace Mined_Out {
                     Console.Write(' ');
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public Event Move(Direction direction) {
+            playerCell.PlayerLeft();
+            
+            switch(direction) {
+                case Direction.Down:
+                    if(playerCoords.i + 1 < field.GetLength(0)) {
+                        playerCoords.i++;
+                    } else {
+                        return Event.Nothing;
+                    }
+                    break;
+                case Direction.Up:
+                    if(playerCoords.i - 1 > 0) {
+                        playerCoords.i--;
+                    } else {
+                        return Event.Nothing;
+                    }
+                    break;
+                case Direction.Left:
+                    if(playerCoords.j - 1 > 0) {
+                        playerCoords.j--;
+                    } else {
+                        return Event.Nothing;
+                    }
+                    break;
+                case Direction.Right:
+                    if(playerCoords.j + 1 < field.GetLength(1)) {
+                        playerCoords.j++;
+                    } else {
+                        return Event.Nothing;
+                    }
+                    break;
+            }
+            return PlayerDidMove();
+        }
+
+        private Event PlayerDidMove() {
+            
+            if(playerCell.IsMined) {
+                return Event.Boom;
             }
         }
     }

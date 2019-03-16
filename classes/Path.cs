@@ -13,5 +13,13 @@ namespace Mined_Out {
                 this.IsVisited = false;
             }
         }
+
+        public void PlayerEntered(char newIcon = '0') {
+            this.Icon = newIcon;
+            this.IsVisited = true;
+        }
+        public void PlayerLeft() {
+            this.Icon = '.';
+        }
     }
 }
