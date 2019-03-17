@@ -4,7 +4,8 @@ namespace Mined_Out {
     public static class FieldGenerator {
         public static Field Generate() {
             Field field = PreGenerateField(10, 9);
-
+            field = GenerateProtectedPath(field);
+            field = EnrichWithMines(field);
             return field;
         }
 
@@ -29,6 +30,60 @@ namespace Mined_Out {
                 field[i, width - 1] = new Wall();
             }
 
+            return field;
+        }
+        private static Field GenerateProtectedPath(Field field) {
+            Random rnd = new Random();
+            Coords c = new Coords(field.PlayerCoords.i, field.PlayerCoords.j);
+            int suitable = 0;
+            Direction[] directions = new Direction[4];
+            Direction d;
+            while(!field.IsFinish(c)) {
+                if(field.IsSuitable(c.i - 1, c.j)) {
+                    directions[suitable++] = Direction.Up;
+                }
+                if(field.IsSuitable(c.i, c.j + 1)) {
+                    directions[suitable++] = Direction.Right;
+                }
+                if(field.IsSuitable(c.i, c.j - 1)) {
+                    directions[suitable++] = Direction.Left;
+                }
+
+                // Choose direction
+                d = directions[rnd.Next(suitable)];
+                if(d == Direction.Up) {
+                    c.i--;
+                } else if(d == Direction.Left) {
+                    c.j--;
+                } else if(d == Direction.Right) {
+                    c.j++;
+                }
+                if(!field.IsFinish(c)) {
+                    field.SetProtected(c);
+                }
+                else {
+                    break;
+                }
+                suitable = 0;
+            }
+            return field;
+        }
+        
+        // Density in percents (0 - 100)
+        private static Field EnrichWithMines(Field field, int density = 50) {
+            Random rnd = new Random();
+            int minesToPlant = (int)((double)field.SuitableCellsAmount / 100 * density);
+            int i, j;
+            while(minesToPlant > 0) {
+                i = rnd.Next(1, field.Height - 2);
+                j = rnd.Next(1, field.Width - 2);
+                if(field.IsSuitable(i, j)) {
+                    field.PlantMine(i, j);
+                    minesToPlant--;
+                }
+                field.PrintToConsole();
+                System.Console.WriteLine(minesToPlant);
+            }
             return field;
         }
     }
