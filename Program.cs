@@ -6,8 +6,8 @@ namespace Mined_Out
     {
         static void Main(string[] args)
         {
-            Field f = new Field();
-            f.PrintToConsole();
+            GameController g = new GameController();
+            g.Run();
         }
     }
 }

@@ -1,0 +1,14 @@
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/libhostpolicy.dylib
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/libhostfxr.dylib
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.deps.json
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.runtimeconfig.json
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.runtimeconfig.dev.json
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.dll
+/home/denis/projects/Mined-Out/bin/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.pdb
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.csprojAssemblyReference.cache
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.csproj.CoreCompileInputs.cache
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.AssemblyInfoInputs.cache
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.AssemblyInfo.cs
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.dll
+/home/denis/projects/Mined-Out/obj/Release/netcoreapp2.2/osx.10.14-x64/Mined-Out.pdb
