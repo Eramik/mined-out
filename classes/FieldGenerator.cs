@@ -70,7 +70,7 @@ namespace Mined_Out {
         }
         
         // Density in percents (0 - 100)
-        private static Field EnrichWithMines(Field field, int density = 35) {
+        private static Field EnrichWithMines(Field field, int density = 28) {
             Random rnd = new Random();
             int minesToPlant = (int)((double)field.SuitableCellsAmount / 100 * density);
             int i, j;
