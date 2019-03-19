@@ -43,6 +43,16 @@ namespace Mined_Out {
                     AskExitToMenu();
                     field.PrintToConsole();
                     continue;
+                } else if(key == ConsoleKey.C) { 
+                    string message;
+                    if(field.CheckIsWinnable()) {
+                        message = "The level is winnable!";
+                    } else {
+                        message = "The leverl is NOT winnable :(";
+                    }
+                    NotifyUser(message);
+                    field.PrintToConsole();
+                    continue;
                 } else {
                     continue;
                 }
@@ -63,6 +73,14 @@ namespace Mined_Out {
                 }
                 
             }
+        }
+
+        private void NotifyUser(string message) {
+            string[] menuOptions = new string[1];
+            menuOptions[0] = "OK";
+            MenuAction[] menuActions = new MenuAction[1];
+            menuActions[0] = null;
+            RunMenu(menuOptions, menuActions, message);
         }
         private void AskExitToMenu() {
             string[] menuOptions = new string[2];

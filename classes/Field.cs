@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Mined_Out {
 
@@ -73,18 +74,18 @@ namespace Mined_Out {
             SetProtected(c.i, c.j);
         }
 
-        public bool IsSuitable(int i, int j) {
-            return IsSuitable(new Coords(i, j));
+        public bool IsSuitable(int i, int j, bool acceptProtected = false) {
+            return IsSuitable(new Coords(i, j), acceptProtected);
         }
         // Used for generating levels
-        public bool IsSuitable(Coords c) {
+        public bool IsSuitable(Coords c, bool acceptProtected = false) {
             if(c.i < 0 || c.j < 0 || c.i >= Height || c.j >= Width) {
                 return false;
             }
             if(field[c.i, c.j] is Wall) {
                 return false;
             }
-            if(isMined(c.i, c.j) || IsProtected(c)) {
+            if(isMined(c.i, c.j) || (!acceptProtected && IsProtected(c))) {
                 return false;
             }
             return true;
@@ -145,6 +146,31 @@ namespace Mined_Out {
                     this.field[i, j] = new Path();
                 }
             }
+        }
+
+        public bool CheckIsWinnable() {
+            Queue<Coords> queue = new Queue<Coords>();
+            queue.Enqueue(PlayerCoords);
+            Coords c;
+            while(queue.Count > 0) {
+                c = queue.Dequeue();
+                if(IsFinish(c)) return true;
+
+                // Add adjacent elements
+                if(IsSuitable(c.i + 1, c.j, true)) {
+                    queue.Enqueue(new Coords(c.i + 1, c.j));
+                }
+                if(IsSuitable(c.i - 1, c.j, true)) {
+                    queue.Enqueue(new Coords(c.i - 1, c.j));
+                }
+                if(IsSuitable(c.i, c.j + 1, true)) {
+                    queue.Enqueue(new Coords(c.i, c.j + 1));
+                }
+                if(IsSuitable(c.i, c.j - 1, true)) {
+                    queue.Enqueue(new Coords(c.i, c.j - 1));
+                }
+            }
+            return false;
         }
 
         public void PrintToConsole() {
