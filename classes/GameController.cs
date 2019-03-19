@@ -94,15 +94,17 @@ namespace Mined_Out {
         }
         private delegate void MenuAction();
         private void RunMainMenu() {
-            string[] menuOptions = new string[2];
+            string[] menuOptions = new string[3];
             menuOptions[0] = "Start game";
+            menuOptions[1] = "Help";
             //menuOptions[1] = "Two Players";
             //menuOptions[2] = "Level editor";
             //menuOptions[3] = "Help";
-            menuOptions[1] = "Exit";
-            MenuAction[] actions = new MenuAction[2];
+            menuOptions[2] = "Exit";
+            MenuAction[] actions = new MenuAction[3];
             actions[0] = StartGame;
-            actions[1] = Exit;
+            actions[1] = Help;
+            actions[2] = Exit;
             RunMenu(menuOptions, actions, "GAME MENU");  
         }
         private void RunMenu(string[] menuOptions, MenuAction[] actions, string header = "", int active = 0) {
@@ -123,6 +125,14 @@ namespace Mined_Out {
                     }
                 }
             }
+        }
+        private void Help() {
+            string message = @"Controls:
+            Use arrow keys or WASD to navigate
+            Press ESC to enter game menu
+            Press C when in game to check if the level is winnable";
+            NotifyUser(message);
+            RunMainMenu();
         }
         private void StartGame() {
             RunGame();
