@@ -2,18 +2,18 @@ using System;
 
 namespace Mined_Out {
     public static class FieldGenerator {
-        public static Field Generate() {
-            Field field = PreGenerateField(10, 9);
+        public static Field Generate(Inventory i) {
+            Field field = PreGenerateField(10, 9, i);
             field = GenerateProtectedPath(field);
             field = EnrichWithMines(field);
             return field;
         }
 
-        private static Field PreGenerateField(int height, int width) {
+        private static Field PreGenerateField(int height, int width, Inventory inv) {
             if (width % 2 == 0) {
                 throw new Exception("Width of the game field has to be odd");
             }
-            Field field = new Field(height, width);
+            Field field = new Field(height, width, inv);
             int mid = (int)(width / 2);
             // Lower edge
             for(int i = 0; i < width; i++) {

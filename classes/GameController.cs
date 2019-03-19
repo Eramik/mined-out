@@ -4,12 +4,13 @@ namespace Mined_Out {
     public delegate void MenuAction();
     public class GameController {
         private Field field;
+        private Inventory inventory = new Inventory();
         public GameController() {
             Console.CursorVisible = false;
             Console.Title = "Mined Out";
         }
         private void Generate() {
-            this.field = FieldGenerator.Generate();
+            this.field = FieldGenerator.Generate(inventory);
         }
         public void Run() {
             RunMainMenu();

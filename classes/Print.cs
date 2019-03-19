@@ -8,6 +8,10 @@ namespace Mined_Out {
                 return;
             }
             Path p = (Path)c;
+            if(p.ContainsItem) {
+                Item(p.Icon);
+                return;
+            }
             if(p.IsPlayerHere) {
                 Player(p.Icon);
                 return;
@@ -23,17 +27,20 @@ namespace Mined_Out {
             Console.Write(' ');
         }
         public static void Mine() {
-            Custom('*', ConsoleColor.Red);
+            Custom('✘', ConsoleColor.Red);
         }
         public static void Wall() {
             Custom('#', ConsoleColor.Gray);
         }
 
         public static void VisitedPath() {
-            Custom('.', ConsoleColor.Green);
+            Custom('·', ConsoleColor.Green);
         }
         public static void Player(char icon) {
             Custom(icon, ConsoleColor.DarkGreen);
+        }
+        public static  void Item(char icon) {
+            Custom(icon, ConsoleColor.Yellow);
         }
 
         public static void Custom(char c, ConsoleColor color) {

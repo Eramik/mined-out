@@ -25,7 +25,7 @@ namespace Mined_Out {
     }
     public class Field {
         private Cell[,] field;
-        private Inventory inventory = new Inventory();
+        private Inventory inventory;
 
         public Cell this[int i, int j] {
             get {
@@ -55,9 +55,10 @@ namespace Mined_Out {
         public Coords PlayerCoords {get {
             return player.coords;
         }}
-        public Field(int height, int width) {
+        public Field(int height, int width, Inventory i) {
             this.field = new Cell[height, width];
             this.initEmptyField();
+            this.inventory = i;
         }
 
         public void SetPlayer(int i, int j) {

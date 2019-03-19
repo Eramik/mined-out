@@ -7,6 +7,9 @@ namespace Mined_Out {
         } get {return isMined;}}
         private bool isMined;
         private InventoryItem item = null;
+        public bool ContainsItem {get {
+            return item != null;
+        }}
         public bool IsVisited {private set; get;}
         public bool IsPlayerHere {private set; get;}
         private bool isProtected;
@@ -47,7 +50,12 @@ namespace Mined_Out {
             this.IsPlayerHere = true;
             this.Icon = newIcon;
             this.IsVisited = true;
-            return item;
+            if(this.ContainsItem) {
+                InventoryItem i = this.item;
+                this.item = null;
+                return i;
+            }
+            return null;
         }
         public void PlayerLeft() {
             this.Icon = '.';
