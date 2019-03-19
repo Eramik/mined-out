@@ -34,6 +34,7 @@ namespace Mined_Out {
         }
         private static Field GenerateProtectedPath(Field field) {
             Random rnd = new Random();
+            var q = Inventory.GenerateItemsToSpawn();
             Coords c = new Coords(field.PlayerCoords.i, field.PlayerCoords.j);
             int suitable = 0;
             Direction[] directions = new Direction[4];
@@ -60,6 +61,9 @@ namespace Mined_Out {
                 }
                 if(!field.IsFinish(c)) {
                     field.SetProtected(c);
+                    if(q.Count != 0 && rnd.Next(100) < 10) {
+                        ((Path)field[c.i, c.j]).PutItem(q.Dequeue());
+                    }
                 }
                 else {
                     break;

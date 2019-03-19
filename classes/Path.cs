@@ -61,5 +61,9 @@ namespace Mined_Out {
             this.Icon = '.';
             this.IsPlayerHere = true;
         }
+        public void PutItem(InventoryItem item) {
+            this.item = item;
+            this.Icon = item.Icon;
+        }
     }
 }
