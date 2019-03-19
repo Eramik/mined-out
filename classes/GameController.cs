@@ -1,8 +1,13 @@
 using System;
 
 namespace Mined_Out {
+    public delegate void MenuAction();
     public class GameController {
         private Field field;
+        public GameController() {
+            Console.CursorVisible = false;
+            Console.Title = "Mined Out";
+        }
         private void Generate() {
             this.field = FieldGenerator.Generate();
         }
@@ -60,12 +65,12 @@ namespace Mined_Out {
                 Event result = field.Move(d);
                 if (result == Event.Boom) {
                     Console.Clear();
-                    Console.WriteLine("YOU DIED!");
+                    Print.CustomLine("YOU DIED!", ConsoleColor.Red);
                     return;
                 }
                 if (result == Event.Finished) {
                     Console.Clear();
-                    Console.WriteLine("$$$ YOU WON $$$");
+                    Print.CustomLine("$$$ YOU WON $$$", ConsoleColor.Green);
                     return;
                 }
                 if(result != Event.Nothing) {
@@ -92,7 +97,6 @@ namespace Mined_Out {
             string header = "Do you want to exit to game menu?";
             RunMenu(menuOptions, actions, header);
         }
-        private delegate void MenuAction();
         private void RunMainMenu() {
             string[] menuOptions = new string[3];
             menuOptions[0] = "Start game";
@@ -107,7 +111,7 @@ namespace Mined_Out {
             actions[2] = Exit;
             RunMenu(menuOptions, actions, "GAME MENU");  
         }
-        private void RunMenu(string[] menuOptions, MenuAction[] actions, string header = "", int active = 0) {
+        public static void RunMenu(string[] menuOptions, MenuAction[] actions, string header = "", int active = 0) {
             while(true) {
                 PrintMenu(menuOptions, header, active);
                 var key = Console.ReadKey(true);
@@ -137,12 +141,12 @@ namespace Mined_Out {
         private void StartGame() {
             RunGame();
         }
-        private void Exit() {
+        public static void Exit() {
             Console.Clear();
             Console.WriteLine("Have a nice day!");
             System.Environment.Exit(0);
         }
-        private void PrintMenu(string[] menuOptions, string header, int active) {
+        public static void PrintMenu(string[] menuOptions, string header, int active) {
             Console.Clear();
             Console.WriteLine(header);
             Console.WriteLine();

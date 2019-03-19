@@ -25,6 +25,7 @@ namespace Mined_Out {
     }
     public class Field {
         private Cell[,] field;
+        private Inventory inventory = new Inventory();
 
         public Cell this[int i, int j] {
             get {
@@ -177,7 +178,7 @@ namespace Mined_Out {
             Console.Clear();
             for(int i = 0; i < this.field.GetLength(0); i++) {
                 for(int j = 0; j < this.field.GetLength(1); j++) {
-                    Console.Write(this.field[i, j].Icon);
+                    Print.WithStyle(this.field[i, j]);
                     Console.Write(' ');
                 }
                 Console.WriteLine();
@@ -233,7 +234,10 @@ namespace Mined_Out {
                 return Event.Boom;
             }
             char playerIcon = CalculateMines(player.coords).ToString()[0];
-            playerCell.PlayerEntered(playerIcon);
+            InventoryItem item = playerCell.PlayerEntered(playerIcon);
+            if(item != null) {
+                inventory.Add(item);
+            }
             if(IsFinish(player.coords)) {
                 return Event.Finished;
             }
