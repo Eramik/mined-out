@@ -13,7 +13,7 @@ namespace Mined_Out {
         public bool IsVisited {private set; get;}
         public bool IsPlayerHere {private set; get;}
         private bool isProtected;
-
+        public bool IsSelected {private set; get;}
         public bool IsExposed {private set; get;}
         public bool IsProtected {set {
             this.isProtected = value;
@@ -64,6 +64,14 @@ namespace Mined_Out {
         public void PutItem(InventoryItem item) {
             this.item = item;
             this.Icon = item.Icon;
+        }
+
+        public void Select() {
+            this.IsSelected = true;
+        }
+        
+        public void Unselect() {
+            this.IsSelected = false;
         }
     }
 }
