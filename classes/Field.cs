@@ -24,8 +24,8 @@ namespace Mined_Out {
         Finished
     }
     public class Field {
-        private Cell[,] field;
-        private Inventory inventory;
+        protected Cell[,] field;
+        protected Inventory inventory;
 
         public Cell this[int i, int j] {
             get {
@@ -35,8 +35,12 @@ namespace Mined_Out {
                 field[i,j] = value;
             }
         }
-        private Path playerCell {get {
+        protected Path playerCell {get {
             return field[player.coords.i, player.coords.j] as Path;
+        }}
+
+        protected Path player2Cell {get {
+            return field[player2.coords.i, player2.coords.j] as Path;
         }}
 
         public int SuitableCellsAmount {get {
@@ -51,21 +55,47 @@ namespace Mined_Out {
             return a;
         }}
 
-        private Player player;
+        protected Player player;
+        protected Player player2 = null;
+        bool twoPlayersMode = false;
         public Coords PlayerCoords {get {
+            if(player == null) {
+                return player2.coords;
+            }
             return player.coords;
         }}
+        public Coords Player2Coords {get {
+            if(player2 == null) {
+                return player.coords;
+            } else {
+                return player2.coords;
+            }
+        }}
+        
         public Field(int height, int width, Inventory i) {
             this.field = new Cell[height, width];
             this.initEmptyField();
             this.inventory = i;
         }
 
-        public void SetPlayer(int i, int j) {
-            this.player = new Player(i, j);
-            this.field[i, j] = new Path(player: true);
+        public Field(int height, int width, Inventory i, bool twoPlayers) {
+            this.field = new Cell[height, width];
+            this.initEmptyField();
+            this.inventory = i;
+            this.twoPlayersMode = twoPlayers;
         }
-        private int CalculateMines (Coords c) {
+
+        public void SetPlayer(int i, int j, int playerNumber = 1) {
+            if(playerNumber == 1) {
+                this.player = new Player(i, j);
+                this.field[i, j] = new Path(player: true);
+            } else {
+                this.player2 = new Player(i, j);
+                this.field[i, j] = new Path(player: true, playerNumber: 2);
+            }
+            
+        }
+        protected int CalculateMines (Coords c) {
             return this.CalculateMines(c.i, c.j);
         }
 
@@ -76,11 +106,11 @@ namespace Mined_Out {
             SetProtected(c.i, c.j);
         }
 
-        public bool IsSuitable(int i, int j, bool acceptProtected = false) {
-            return IsSuitable(new Coords(i, j), acceptProtected);
+        public bool IsSuitable(int i, int j, bool acceptProtected = false, bool ignorePlayer = true) {
+            return IsSuitable(new Coords(i, j), acceptProtected, ignorePlayer);
         }
         // Used for generating levels
-        public bool IsSuitable(Coords c, bool acceptProtected = false) {
+        public bool IsSuitable(Coords c, bool acceptProtected = false, bool ignorePlayer = true) {
             if(c.i < 0 || c.j < 0 || c.i >= Height || c.j >= Width) {
                 return false;
             }
@@ -88,6 +118,9 @@ namespace Mined_Out {
                 return false;
             }
             if(isMined(c.i, c.j) || (!acceptProtected && IsProtected(c))) {
+                return false;
+            }
+            if(!ignorePlayer && ((Path)field[c.i, c.j]).IsPlayerHere) {
                 return false;
             }
             return true;
@@ -110,7 +143,7 @@ namespace Mined_Out {
         }
 
         public bool IsFinish(int i, int j) {
-            if(!IsSuitable(i, j)) {
+            if(!IsSuitable(i, j, false, true)) {
                 return false;
             }
             if(i == 0) {
@@ -121,7 +154,7 @@ namespace Mined_Out {
         public bool IsFinish(Coords c) {
             return IsFinish(c.i, c.j);
         }
-        private int CalculateMines(int i, int j) {
+        protected int CalculateMines(int i, int j) {
             int mines = 0;
 
             if(i - 1 >= 0 && isMined(i - 1, j)) {
@@ -142,7 +175,7 @@ namespace Mined_Out {
             
             return mines;
         }
-        private bool isMined(int i, int j) {
+        protected bool isMined(int i, int j) {
             Path p = field[i, j] as Path;
             return p != null && p.IsMined;
         }
@@ -152,7 +185,7 @@ namespace Mined_Out {
         public int Height {get {
             return field.GetLength(0);
         }}
-        private void initEmptyField() {
+        protected void initEmptyField() {
             for(int i = 0; i < this.field.GetLength(0); i++) {
                 for(int j = 0; j < this.field.GetLength(1); j++) {
                     this.field[i, j] = new Path();
@@ -202,13 +235,30 @@ namespace Mined_Out {
             }
         }
 
-        public Event Move(Direction direction) {
-
-
+        public Event Move(Direction direction, int playerNumber = 1) {
+            Player player;
+            Path playerCell;
+            if(this.player == null && this.player2 == null) {
+                return Event.Boom;
+            }
+            if(playerNumber == 1) {
+                if(this.player == null) {
+                    return Event.Nothing;
+                }
+                player = this.player;
+                playerCell = this.playerCell;
+            } else {
+                if(this.player2 == null) {
+                    return Event.Nothing;
+                }
+                player = this.player2;
+                playerCell = this.player2Cell;
+            }
             switch(direction) {
                 case Direction.Down:
                     if(player.coords.i + 1 < field.GetLength(0) &&
-                        !(field[player.coords.i + 1, player.coords.j] is Wall)) {
+                        !(field[player.coords.i + 1, player.coords.j] is Wall) &&
+                        !((Path)field[player.coords.i + 1, player.coords.j]).IsPlayerHere) {
                         playerCell.PlayerLeft();
                         player.coords.i += 1;
                     } else {
@@ -217,7 +267,8 @@ namespace Mined_Out {
                     break;
                 case Direction.Up:
                     if(player.coords.i - 1 >= 0 &&
-                        !(field[player.coords.i - 1, player.coords.j] is Wall)) {
+                        !(field[player.coords.i - 1, player.coords.j] is Wall) &&
+                        !((Path)field[player.coords.i - 1, player.coords.j]).IsPlayerHere) {
                         playerCell.PlayerLeft();
                         player.coords.i--;
                     } else {
@@ -226,7 +277,8 @@ namespace Mined_Out {
                     break;
                 case Direction.Left:
                     if(player.coords.j - 1 >= 0 &&
-                        !(field[player.coords.i, player.coords.j - 1] is Wall)) {
+                        !(field[player.coords.i, player.coords.j - 1] is Wall) &&
+                        !((Path)field[player.coords.i, player.coords.j - 1]).IsPlayerHere) {
                         playerCell.PlayerLeft();
                         player.coords.j--;
                     } else {
@@ -235,7 +287,8 @@ namespace Mined_Out {
                     break;
                 case Direction.Right:
                     if(player.coords.j + 1 < field.GetLength(1) &&
-                        !(field[player.coords.i, player.coords.j + 1] is Wall)) {
+                        !(field[player.coords.i, player.coords.j + 1] is Wall) &&
+                        !((Path)field[player.coords.i, player.coords.j + 1]).IsPlayerHere) {
                         playerCell.PlayerLeft();
                         player.coords.j++;
                     } else {
@@ -243,15 +296,40 @@ namespace Mined_Out {
                     }
                     break;
             }
-            return PlayerDidMove();
+            return PlayerDidMove(playerNumber);
         }
 
-        private Event PlayerDidMove() {
+        protected Event PlayerDidMove(int playerNumber = 1) {
+            Player player;
+            Path playerCell;
+            if(playerNumber == 1) {
+                if(this.player == null) {
+                    return Event.Nothing;
+                }
+                player = this.player;
+                playerCell = this.playerCell;
+            } else {
+                if(this.player2 == null) {
+                    return Event.Nothing;
+                }
+                player = this.player2;
+                playerCell = this.player2Cell;
+            }
+
             if(playerCell.IsMined) {
-                return Event.Boom;
+                if(player == null && player2 == null) {
+                    return Event.Boom;
+                }
+                playerCell.Expose();
+                if(playerNumber == 1) {
+                    this.player = null;
+                } else {
+                    this.player2 = null;
+                }
+                return Event.Step;
             }
             char playerIcon = CalculateMines(player.coords).ToString()[0];
-            InventoryItem item = playerCell.PlayerEntered(playerIcon);
+            InventoryItem item = playerCell.PlayerEntered(playerIcon, playerNumber);
             if(item != null) {
                 inventory.Add(item);
             }

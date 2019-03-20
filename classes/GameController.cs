@@ -4,13 +4,14 @@ namespace Mined_Out {
     public delegate void MenuAction();
     public class GameController {
         private Field field;
+        private bool twoPlayers = false;
         private Inventory inventory = new Inventory();
         public GameController() {
             Console.CursorVisible = false;
             Console.Title = "Mined Out";
         }
         private void Generate() {
-            this.field = FieldGenerator.Generate(inventory);
+            this.field = FieldGenerator.Generate(inventory, twoPlayers);
         }
         public void Run() {
             RunMainMenu();
@@ -29,10 +30,12 @@ namespace Mined_Out {
         }
 
         private void Walking() {
+            int playerNumber = 1;
             while(true) {
                 var consoleKey = Console.ReadKey(true);
                 ConsoleKey key = consoleKey.Key;
                 Direction d;
+
                 if(key == ConsoleKey.DownArrow ||
                     key == ConsoleKey.S) {
                     d = Direction.Down;
@@ -66,8 +69,17 @@ namespace Mined_Out {
                 } else {
                     continue;
                 }
+
+                if(twoPlayers && (key == ConsoleKey.UpArrow || 
+                    key == ConsoleKey.DownArrow ||
+                    key == ConsoleKey.LeftArrow ||
+                    key == ConsoleKey.RightArrow)) {
+                    playerNumber = 2;
+                } else {
+                    playerNumber = 1;
+                }
                 
-                Event result = field.Move(d);
+                Event result = field.Move(d, playerNumber);
                 if (result == Event.Boom) {
                     Console.Clear();
                     Print.CustomLine("YOU DIED!", ConsoleColor.Red);
@@ -103,17 +115,18 @@ namespace Mined_Out {
             RunMenu(menuOptions, actions, header);
         }
         private void RunMainMenu() {
-            string[] menuOptions = new string[3];
+            string[] menuOptions = new string[4];
             menuOptions[0] = "Start game";
-            menuOptions[1] = "Help";
-            //menuOptions[1] = "Two Players";
+            menuOptions[1] = "Two Players";
+            menuOptions[2] = "Help";
             //menuOptions[2] = "Level editor";
             //menuOptions[3] = "Help";
-            menuOptions[2] = "Exit";
-            MenuAction[] actions = new MenuAction[3];
+            menuOptions[3] = "Exit";
+            MenuAction[] actions = new MenuAction[4];
             actions[0] = StartGame;
-            actions[1] = Help;
-            actions[2] = Exit;
+            actions[1] = TwoPlayers;
+            actions[2] = Help;
+            actions[3] = Exit;
             RunMenu(menuOptions, actions, "GAME MENU");  
         }
         public static void RunMenu(string[] menuOptions, MenuAction[] actions, string header = "", int active = 0) {
@@ -138,12 +151,23 @@ namespace Mined_Out {
         private void Help() {
             string message = @"Controls:
             Use arrow keys or WASD to navigate
+            Press SPACE or ENTER to choose or to open inventory when in game
             Press ESC to enter game menu
-            Press C when in game to check if the level is winnable";
+            Press C when in game to check if the level is winnable
+            
+            In two player mode:
+            Player 1 plays with WASD
+            Player 2 plays with arrows";
             NotifyUser(message);
             RunMainMenu();
         }
         private void StartGame() {
+            this.twoPlayers = false;
+            RunGame();
+        }
+
+        private void TwoPlayers() {
+            this.twoPlayers = true;
             RunGame();
         }
         public static void Exit() {

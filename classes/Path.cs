@@ -2,8 +2,6 @@ namespace Mined_Out {
     public class Path : Cell {
         public bool IsMined {set {
             isMined = value;
-            //if(isMined)
-            //Icon = 'M';
         } get {return isMined;}}
         private bool isMined;
         private InventoryItem item = null;
@@ -13,20 +11,20 @@ namespace Mined_Out {
         public bool IsVisited {private set; get;}
         public bool IsPlayerHere {private set; get;}
         private bool isProtected;
+        public int PlayerNumber {private set; get;}
         public bool IsSelected {private set; get;}
         public bool IsExposed {private set; get;}
         public bool IsProtected {set {
             this.isProtected = value;
-            //if(isProtected)
-            //this.Icon = 'P';
         } get {return this.isProtected;}}
-        public Path(bool player = false) {
+        public Path(bool player = false, int playerNumber = 1) {
             this.IsPlayerHere = player;
             this.IsExposed = false;
             this.IsMined = false;
             if(player) {
                 this.Icon = '0';
                 this.IsVisited = true;
+                this.PlayerNumber = playerNumber;
             } else {
                 this.Icon = ' ';
                 this.IsVisited = false;
@@ -52,10 +50,11 @@ namespace Mined_Out {
             }
         }
 
-        public InventoryItem PlayerEntered(char newIcon = '0') {
+        public InventoryItem PlayerEntered(char newIcon = '0', int playerNumber = 1) {
             this.IsPlayerHere = true;
             this.Icon = newIcon;
             this.IsVisited = true;
+            this.PlayerNumber = playerNumber;
             if(this.ContainsItem) {
                 InventoryItem i = this.item;
                 this.item = null;
@@ -65,7 +64,7 @@ namespace Mined_Out {
         }
         public void PlayerLeft() {
             this.Icon = '.';
-            this.IsPlayerHere = true;
+            this.IsPlayerHere = false;
         }
         public void PutItem(InventoryItem item) {
             this.item = item;

@@ -17,7 +17,7 @@ namespace Mined_Out {
                 return;
             }
             if(p.IsPlayerHere) {
-                Player(p.Icon);
+                Player(p.Icon, p.PlayerNumber);
                 return;
             }
             if(p.IsVisited) {
@@ -37,10 +37,14 @@ namespace Mined_Out {
             Custom('#', ConsoleColor.Gray);
         }
         public static void VisitedPath() {
-            Custom('·', ConsoleColor.Green);
+            Custom('.', ConsoleColor.Green);
         }
-        public static void Player(char icon) {
-            Custom(icon, ConsoleColor.DarkGreen);
+        public static void Player(char icon, int playerNumber = 1) {
+            if(playerNumber == 1) {
+                Custom(icon, ConsoleColor.DarkGreen);
+            } else {
+                Custom(icon, ConsoleColor.DarkCyan);
+            }
         }
         public static  void Item(char icon) {
             Custom(icon, ConsoleColor.Yellow);

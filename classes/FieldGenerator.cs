@@ -2,23 +2,40 @@ using System;
 
 namespace Mined_Out {
     public static class FieldGenerator {
-        public static Field Generate(Inventory i) {
-            Field field = PreGenerateField(10, 9, i);
+        public static Field Generate(Inventory i, bool twoPlayers = false) {
+            Field field;
+            if(twoPlayers) {
+                field = PreGenerateField(10, 10, i, twoPlayers);
+            } else {
+                field = PreGenerateField(10, 9, i, twoPlayers);
+            }
             field = GenerateProtectedPath(field);
-            field = EnrichWithMines(field);
+            int minesDensity = 28;
+            if(twoPlayers) {
+                minesDensity += 9;
+            }
+            field = EnrichWithMines(field, minesDensity);
             return field;
         }
 
-        private static Field PreGenerateField(int height, int width, Inventory inv) {
-            if (width % 2 == 0) {
+        private static Field PreGenerateField(int height, int width, Inventory inv, bool twoPlayers = false) {
+            if(twoPlayers && width % 2 == 1) {
+                throw new Exception("Width of the game field has to be even");
+            }
+            if (!twoPlayers && width % 2 == 0) {
                 throw new Exception("Width of the game field has to be odd");
             }
             Field field = new Field(height, width, inv);
-            int mid = (int)(width / 2);
+            int mid = mid = (int)(width / 2);;
+            if(twoPlayers) {
+                mid--;
+            }
             // Lower edge
             for(int i = 0; i < width; i++) {
                 if (i == mid) {
                     field.SetPlayer(height - 1, mid);
+                } else if (twoPlayers && i == mid + 1) {
+                    field.SetPlayer(height - 1, mid + 1, 2);
                 } else {
                     field[height - 1, i] = new Wall();
                 }
