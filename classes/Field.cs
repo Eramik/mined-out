@@ -92,6 +92,16 @@ namespace Mined_Out {
             }
             return true;
         }
+
+        public bool IsPath(int i, int j) {
+            if(i < 0 || j < 0 || i >= Height || j >= Width) {
+                return false;
+            }
+            if(field[i, j] is Wall) {
+                return false;
+            }
+            return true;
+        }
         public bool IsProtected(Coords c) {
             return ((Path)field[c.i,c.j]).IsProtected;
         }
@@ -175,12 +185,18 @@ namespace Mined_Out {
             return false;
         }
 
-        public void PrintToConsole() {
+        public void PrintToConsole(string[] inventoryOutput = null) {
+            if(inventoryOutput == null) {
+                inventoryOutput = inventory.ToArrayOfStrings();
+            }
             Console.Clear();
             for(int i = 0; i < this.field.GetLength(0); i++) {
                 for(int j = 0; j < this.field.GetLength(1); j++) {
                     Print.WithStyle(this.field[i, j]);
                     Console.Write(' ');
+                }
+                if(i < inventoryOutput.Length) {
+                    Console.Write(inventoryOutput[i]);
                 }
                 Console.WriteLine();
             }

@@ -61,7 +61,7 @@ namespace Mined_Out {
                 }
                 if(!field.IsFinish(c)) {
                     field.SetProtected(c);
-                    if(q.Count != 0 && rnd.Next(100) < 10) {
+                    if(q.Count != 0 && rnd.Next(100) < 8) {
                         ((Path)field[c.i, c.j]).PutItem(q.Dequeue());
                     }
                 }

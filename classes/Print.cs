@@ -8,6 +8,10 @@ namespace Mined_Out {
                 return;
             }
             Path p = (Path)c;
+            if(p.IsSelected) {
+                CustomBackground(p.Icon, ConsoleColor.DarkGray);
+                return;
+            }
             if(p.ContainsItem) {
                 Item(p.Icon);
                 return;
@@ -32,7 +36,6 @@ namespace Mined_Out {
         public static void Wall() {
             Custom('#', ConsoleColor.Gray);
         }
-
         public static void VisitedPath() {
             Custom('·', ConsoleColor.Green);
         }
@@ -45,6 +48,11 @@ namespace Mined_Out {
 
         public static void Custom(char c, ConsoleColor color) {
             Console.ForegroundColor = color;
+            Console.Write(c);
+            Console.ResetColor();
+        }
+        public static void CustomBackground(char c, ConsoleColor color) {
+            Console.BackgroundColor = color;
             Console.Write(c);
             Console.ResetColor();
         }

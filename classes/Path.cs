@@ -44,6 +44,12 @@ namespace Mined_Out {
 
         public void Expose() {
             this.IsExposed = true;
+            if(!IsMined) {
+                this.IsVisited = true;
+                if(!IsPlayerHere) {
+                    this.Icon = '.';
+                }
+            }
         }
 
         public InventoryItem PlayerEntered(char newIcon = '0') {

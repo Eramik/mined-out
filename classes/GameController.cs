@@ -45,6 +45,10 @@ namespace Mined_Out {
                 } else if(key == ConsoleKey.RightArrow || 
                     key == ConsoleKey.D) {
                     d = Direction.Right;
+                } else if(key == ConsoleKey.Spacebar || key == ConsoleKey.Enter) {
+                    inventory.Activate(field);
+                    field.PrintToConsole();
+                    continue;
                 } else if(key == ConsoleKey.Escape) {
                     AskExitToMenu();
                     field.PrintToConsole();

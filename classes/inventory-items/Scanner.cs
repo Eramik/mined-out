@@ -3,9 +3,9 @@ using System;
 namespace Mined_Out {
     public class Scanner : InventoryItem {
         new public static int ChanceToSpawn = 25;
-        new public const string Type = "Scanner";
         public Scanner() {
             this.Icon = '⎚';
+            this.Type = "Scanner";
         }
 
         override public bool Activate(Field f) {
@@ -19,114 +19,114 @@ namespace Mined_Out {
         }
         private void Expose(Field f, Coords c) {
 
-            if(f.IsSuitable(c.i, c.j, true)) {
+            if(f.IsPath(c.i, c.j)) {
                 ((Path)f[c.i, c.j]).Expose();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j, true)) {
+            if(f.IsPath(c.i + 1, c.j)) {
                 ((Path)f[c.i + 1, c.j]).Expose();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j, true)) {
+            if(f.IsPath(c.i - 1, c.j)) {
                 ((Path)f[c.i - 1, c.j]).Expose();
             }
 
-            if(f.IsSuitable(c.i, c.j + 1, true)) {
+            if(f.IsPath(c.i, c.j + 1)) {
                 ((Path)f[c.i, c.j + 1]).Expose();
             }
 
-            if(f.IsSuitable(c.i, c.j - 1, true)) {
+            if(f.IsPath(c.i, c.j - 1)) {
                 ((Path)f[c.i, c.j - 1]).Expose();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j + 1, true)) {
+            if(f.IsPath(c.i + 1, c.j + 1)) {
                 ((Path)f[c.i + 1, c.j + 1]).Expose();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j - 1, true)) {
+            if(f.IsPath(c.i - 1, c.j - 1)) {
                 ((Path)f[c.i - 1, c.j - 1]).Expose();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j + 1, true)) {
+            if(f.IsPath(c.i - 1, c.j + 1)) {
                 ((Path)f[c.i - 1, c.j + 1]).Expose();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j - 1, true)) {
+            if(f.IsPath(c.i + 1, c.j - 1)) {
                 ((Path)f[c.i + 1, c.j - 1]).Expose();
             }
         }
         private void Draw(Field f, Coords c) {
-            if(f.IsSuitable(c.i, c.j, true)) {
+            if(f.IsPath(c.i, c.j)) {
                 ((Path)f[c.i, c.j]).Select();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j, true)) {
+            if(f.IsPath(c.i + 1, c.j)) {
                 ((Path)f[c.i + 1, c.j]).Select();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j, true)) {
+            if(f.IsPath(c.i - 1, c.j)) {
                 ((Path)f[c.i - 1, c.j]).Select();
             }
 
-            if(f.IsSuitable(c.i, c.j + 1, true)) {
+            if(f.IsPath(c.i, c.j + 1)) {
                 ((Path)f[c.i, c.j + 1]).Select();
             }
 
-            if(f.IsSuitable(c.i, c.j - 1, true)) {
+            if(f.IsPath(c.i, c.j - 1)) {
                 ((Path)f[c.i, c.j - 1]).Select();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j + 1, true)) {
+            if(f.IsPath(c.i + 1, c.j + 1)) {
                 ((Path)f[c.i + 1, c.j + 1]).Select();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j - 1, true)) {
+            if(f.IsPath(c.i - 1, c.j - 1)) {
                 ((Path)f[c.i - 1, c.j - 1]).Select();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j + 1, true)) {
+            if(f.IsPath(c.i - 1, c.j + 1)) {
                 ((Path)f[c.i - 1, c.j + 1]).Select();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j - 1, true)) {
+            if(f.IsPath(c.i + 1, c.j - 1)) {
                 ((Path)f[c.i + 1, c.j - 1]).Select();
             }
 
             f.PrintToConsole();
 
-            if(f.IsSuitable(c.i, c.j, true)) {
+            if(f.IsPath(c.i, c.j)) {
                 ((Path)f[c.i, c.j]).Unselect();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j, true)) {
+            if(f.IsPath(c.i + 1, c.j)) {
                 ((Path)f[c.i + 1, c.j]).Unselect();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j, true)) {
+            if(f.IsPath(c.i - 1, c.j)) {
                 ((Path)f[c.i - 1, c.j]).Unselect();
             }
 
-            if(f.IsSuitable(c.i, c.j + 1, true)) {
+            if(f.IsPath(c.i, c.j + 1)) {
                 ((Path)f[c.i, c.j + 1]).Unselect();
             }
 
-            if(f.IsSuitable(c.i, c.j - 1, true)) {
+            if(f.IsPath(c.i, c.j - 1)) {
                 ((Path)f[c.i, c.j - 1]).Unselect();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j + 1, true)) {
+            if(f.IsPath(c.i + 1, c.j + 1)) {
                 ((Path)f[c.i + 1, c.j + 1]).Unselect();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j - 1, true)) {
+            if(f.IsPath(c.i - 1, c.j - 1)) {
                 ((Path)f[c.i - 1, c.j - 1]).Unselect();
             }
 
-            if(f.IsSuitable(c.i - 1, c.j + 1, true)) {
+            if(f.IsPath(c.i - 1, c.j + 1)) {
                 ((Path)f[c.i - 1, c.j + 1]).Unselect();
             }
 
-            if(f.IsSuitable(c.i + 1, c.j - 1, true)) {
+            if(f.IsPath(c.i + 1, c.j - 1)) {
                 ((Path)f[c.i + 1, c.j - 1]).Unselect();
             }
         }
@@ -138,25 +138,25 @@ namespace Mined_Out {
                 var key = k.Key;
                 
                 if(key == ConsoleKey.W || key == ConsoleKey.UpArrow) {
-                    if(!f.IsSuitable(c.i -1, c.j, true)) {
+                    if(!f.IsPath(c.i -1, c.j)) {
                         continue;
                     }
                     c.i--;
                 } else if(key == ConsoleKey.D || key == ConsoleKey.RightArrow) {
-                    if(!f.IsSuitable(c.i, c.j +1, true)) {
+                    if(!f.IsPath(c.i, c.j +1)) {
                         continue;
                     }
                     c.j++;
                 } else if(key == ConsoleKey.S || key == ConsoleKey.DownArrow) {
-                    if(!f.IsSuitable(c.i +1, c.j, true)) {
+                    if(!f.IsPath(c.i +1, c.j)) {
                         continue;
                     }
                     c.i++;
                 } else if(key == ConsoleKey.A || key == ConsoleKey.LeftArrow) {
-                    if(!f.IsSuitable(c.i, c.j -1, true)) {
+                    if(!f.IsPath(c.i, c.j -1)) {
                         continue;
                     }
-                    c.i--;
+                    c.j--;
                 } else if(key == ConsoleKey.Enter || key == ConsoleKey.Spacebar) {
                     return c;
                 } else if(key == ConsoleKey.Escape) {
