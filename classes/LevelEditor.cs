@@ -159,6 +159,16 @@ namespace Mined_Out {
                         field.Hide();
                         return field;
                     }
+                } else if(key == ConsoleKey.C) {
+                    string message;
+                    if(field.CheckIsWinnable()) {
+                        message = "The level is winnable!";
+                    } else {
+                        message = "The level is not winnable";
+                    }
+                    GameController.NotifyUser(message);
+                    Print(c, active);
+                    continue;
                 } else if(key == ConsoleKey.Escape) {
                     AskExitToMenu();
                     Print(c, active);
