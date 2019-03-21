@@ -228,6 +228,95 @@ namespace Mined_Out {
                 if(p != null) p.Checked = false;
             }
         }
+        private void ResetCheckNumbers() {
+            foreach(Cell c in field) {
+                Path p = c as Path;
+                if(p != null) p.CheckNumber = -1;
+            }
+        }
+
+        public Coords GetHint() {
+            Queue<Coords> queue = new Queue<Coords>();
+            queue.Enqueue(PlayerCoords);
+            Coords c;
+            ResetChecks();
+            ResetCheckNumbers();
+            int checkNumber;
+            playerCell.CheckNumber = 0;
+            while(true) {
+                c = queue.Dequeue();
+                Path p = field[c.i, c.j] as Path;
+                p.Checked = true;
+                checkNumber = p.CheckNumber;
+                if(IsFinish(c)) {
+                    break;
+                }
+                
+                // Add adjacent elements
+                if(IsSuitable(c.i + 1, c.j, true) &&
+                    !((Path)field[c.i + 1, c.j]).Checked) {
+                    queue.Enqueue(new Coords(c.i + 1, c.j));
+                    ((Path)field[c.i + 1, c.j]).CheckNumber = checkNumber + 1;
+                    ((Path)field[c.i + 1, c.j]).Checked = true;
+                }
+                if(IsSuitable(c.i - 1, c.j, true) &&
+                    !((Path)field[c.i - 1, c.j]).Checked) {
+                    queue.Enqueue(new Coords(c.i - 1, c.j));
+                    ((Path)field[c.i - 1, c.j]).Checked = true;
+                    ((Path)field[c.i - 1, c.j]).CheckNumber = checkNumber + 1;
+                }
+                if(IsSuitable(c.i, c.j + 1, true) &&
+                    !((Path)field[c.i, c.j + 1]).Checked) {
+                    queue.Enqueue(new Coords(c.i, c.j + 1));
+                    ((Path)field[c.i, c.j + 1]).Checked = true;
+                    ((Path)field[c.i, c.j + 1]).CheckNumber = checkNumber + 1;
+                }
+                if(IsSuitable(c.i, c.j - 1, true)  &&
+                    !((Path)field[c.i, c.j - 1]).Checked) {
+                    queue.Enqueue(new Coords(c.i, c.j - 1));
+                    ((Path)field[c.i, c.j - 1]).Checked = true;
+                    ((Path)field[c.i, c.j - 1]).CheckNumber = checkNumber + 1;
+                }
+                //Console.ReadKey(true);
+            }
+            while(true) {
+                //((Path)field[c.i, c.j]).Select();
+                if(IsSuitable(c.i + 1, c.j, true) &&
+                    ((Path)field[c.i + 1, c.j]).CheckNumber == checkNumber - 1) {
+                    if(((Path)field[c.i + 1, c.j]).IsPlayerHere) {
+                        return c;
+                    }
+                    c = new Coords(c.i + 1, c.j);
+                    checkNumber--;
+                }
+                if(IsSuitable(c.i - 1, c.j, true) &&
+                    ((Path)field[c.i - 1, c.j]).CheckNumber == checkNumber - 1) {
+                    if(((Path)field[c.i - 1, c.j]).IsPlayerHere) {
+                        return c;
+                    }
+                    c = new Coords(c.i - 1, c.j);
+                    checkNumber--;
+                }
+                if(IsSuitable(c.i, c.j + 1, true) &&
+                    ((Path)field[c.i, c.j + 1]).CheckNumber == checkNumber - 1) {
+                    if(((Path)field[c.i, c.j + 1]).IsPlayerHere) {
+                        return c;
+                    }
+                    c = new Coords(c.i, c.j + 1);
+                    checkNumber--;
+                }
+                if(IsSuitable(c.i, c.j - 1, true) &&
+                    ((Path)field[c.i, c.j - 1]).CheckNumber == checkNumber - 1) {
+                    if(((Path)field[c.i, c.j - 1]).IsPlayerHere) {
+                        return c;
+                    }
+                    c = new Coords(c.i, c.j - 1);
+                    checkNumber--;
+                }
+                //Console.ReadKey(true);
+            }
+            throw new Exception("Hint not found");
+        }
         public bool CheckIsWinnable() {
             Queue<Coords> queue = new Queue<Coords>();
             queue.Enqueue(PlayerCoords);

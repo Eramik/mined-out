@@ -5,6 +5,16 @@ namespace Mined_Out {
         } get {return isMined;}}
         private bool isMined;
         public bool Checked = false;
+        private int checkNumber = -1;
+        public int CheckNumber {
+            get {
+                return  checkNumber;
+            }
+            set {
+                checkNumber = value;
+                //this.Icon = checkNumber.ToString()[0];
+            }
+        }
         private InventoryItem item = null;
         public bool ContainsItem {get {
             return item != null;

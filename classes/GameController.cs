@@ -67,6 +67,14 @@ namespace Mined_Out {
                     NotifyUser(message);
                     field.PrintToConsole();
                     continue;
+                } else if(key == ConsoleKey.H) {
+                    try {
+                        var c = field.GetHint();
+                        field[c.i, c.j].Select();
+                        field.PrintToConsole();
+                        field[c.i, c.j].Unselect();
+                    } catch(Exception e) {}
+                    continue;
                 } else {
                     continue;
                 }
@@ -155,6 +163,7 @@ namespace Mined_Out {
             Press SPACE or ENTER to choose or to open inventory when in game
             Press ESC to enter game menu
             Press C when in game to check if the level is winnable
+            Press H to get a hint
             
             In two player mode:
             Player 1 uses WASD
