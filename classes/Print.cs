@@ -3,15 +3,15 @@ using System;
 namespace Mined_Out {
     public static class Print {
         public static void WithStyle(Cell c) {
+            if(c.IsSelected) {
+                CustomBackground(c.Icon, ConsoleColor.DarkGray);
+                return;
+            }
             if(c is Wall) {
                 Wall();
                 return;
             }
             Path p = (Path)c;
-            if(p.IsSelected) {
-                CustomBackground(p.Icon, ConsoleColor.DarkGray);
-                return;
-            }
             if(p.ContainsItem) {
                 Item(p.Icon);
                 return;
@@ -20,12 +20,12 @@ namespace Mined_Out {
                 Player(p.Icon, p.PlayerNumber);
                 return;
             }
-            if(p.IsVisited) {
-                VisitedPath();
-                return;
-            }
             if(p.IsExposed && p.IsMined) {
                 Mine();
+                return;
+            }
+            if(p.IsVisited) {
+                VisitedPath();
                 return;
             }
             Console.Write(' ');

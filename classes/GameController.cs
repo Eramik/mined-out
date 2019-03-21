@@ -31,6 +31,7 @@ namespace Mined_Out {
 
         private void Walking() {
             int playerNumber = 1;
+            field.PrintToConsole();
             while(true) {
                 var consoleKey = Console.ReadKey(true);
                 ConsoleKey key = consoleKey.Key;
@@ -61,7 +62,7 @@ namespace Mined_Out {
                     if(field.CheckIsWinnable()) {
                         message = "The level is winnable!";
                     } else {
-                        message = "The leverl is NOT winnable :(";
+                        message = "The level is not winnable";
                     }
                     NotifyUser(message);
                     field.PrintToConsole();
@@ -97,7 +98,7 @@ namespace Mined_Out {
             }
         }
 
-        private void NotifyUser(string message) {
+        public static void NotifyUser(string message) {
             string[] menuOptions = new string[1];
             menuOptions[0] = "OK";
             MenuAction[] menuActions = new MenuAction[1];
@@ -115,18 +116,18 @@ namespace Mined_Out {
             RunMenu(menuOptions, actions, header);
         }
         private void RunMainMenu() {
-            string[] menuOptions = new string[4];
+            string[] menuOptions = new string[5];
             menuOptions[0] = "Start game";
             menuOptions[1] = "Two Players";
-            menuOptions[2] = "Help";
-            //menuOptions[2] = "Level editor";
-            //menuOptions[3] = "Help";
-            menuOptions[3] = "Exit";
-            MenuAction[] actions = new MenuAction[4];
+            menuOptions[2] = "Level editor";
+            menuOptions[3] = "Help";
+            menuOptions[4] = "Exit";
+            MenuAction[] actions = new MenuAction[5];
             actions[0] = StartGame;
             actions[1] = TwoPlayers;
-            actions[2] = Help;
-            actions[3] = Exit;
+            actions[2] = LevelEditor;
+            actions[3] = Help;
+            actions[4] = Exit;
             RunMenu(menuOptions, actions, "GAME MENU");  
         }
         public static void RunMenu(string[] menuOptions, MenuAction[] actions, string header = "", int active = 0) {
@@ -156,8 +157,13 @@ namespace Mined_Out {
             Press C when in game to check if the level is winnable
             
             In two player mode:
-            Player 1 plays with WASD
-            Player 2 plays with arrows";
+            Player 1 uses WASD
+            Player 2 uses arrows
+            
+            In level editor mode:
+            Press TAB to switch an editing option
+            Press SPACE or ENTER to choose an option";
+
             NotifyUser(message);
             RunMainMenu();
         }
@@ -169,6 +175,25 @@ namespace Mined_Out {
         private void TwoPlayers() {
             this.twoPlayers = true;
             RunGame();
+        }
+
+        private void LevelEditor() {
+            var editor = new Mined_Out.LevelEditor();
+            this.field = editor.Launch(inventory);
+            this.Walking();
+            Console.ReadKey(true);
+        }
+
+        public static string Prompt(string header) {
+            Console.Clear();
+            Console.WriteLine(header);
+            Console.WriteLine();
+            Console.Write("> ");
+            Console.CursorVisible = true;
+            string s = Console.ReadLine();
+            Console.CursorVisible = false;
+            Console.Clear();
+            return s;
         }
         public static void Exit() {
             Console.Clear();

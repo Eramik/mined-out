@@ -58,6 +58,9 @@ namespace Mined_Out {
         protected Player player;
         protected Player player2 = null;
         bool twoPlayersMode = false;
+        public bool HasPlayer1 {get{
+            return this.player != null;
+        }}
         public Coords PlayerCoords {get {
             if(player == null) {
                 return player2.coords;
@@ -139,7 +142,33 @@ namespace Mined_Out {
             return ((Path)field[c.i,c.j]).IsProtected;
         }
         public void PlantMine(int i, int j) {
-            ((Path)field[i,j]).IsMined = true;
+            Cell c = field[i,j];
+            Path p = c as Path;
+            if(p == null) {
+                p = new Path();
+                field[i, j] = p;
+            }
+            if(p.IsPlayerHere) {
+                p.PlayerLeft();
+                player = null;
+            }
+            p.IsMined = true;
+        }
+
+        public void PlaceWall(Coords c) {
+            Path p = field[c.i, c.j] as Path;
+            if(p != null && p.IsPlayerHere) {
+                this.player = null;
+            }
+            field[c.i, c.j] = new Wall();
+        }
+        
+        public void PlaceScanner(Coords c) {
+            Path p = field[c.i, c.j] as Path;
+            if(p != null && p.IsPlayerHere) {
+                this.player = null;
+            }
+            field[c.i, c.j] = new Path(new Scanner());
         }
 
         public bool IsFinish(int i, int j) {
@@ -193,25 +222,37 @@ namespace Mined_Out {
             }
         }
 
+        private void ResetChecks() {
+            foreach(Cell c in field) {
+                Path p = c as Path;
+                if(p != null) p.Checked = false;
+            }
+        }
         public bool CheckIsWinnable() {
             Queue<Coords> queue = new Queue<Coords>();
             queue.Enqueue(PlayerCoords);
             Coords c;
+            ResetChecks();
             while(queue.Count > 0) {
                 c = queue.Dequeue();
                 if(IsFinish(c)) return true;
-
+                Path p = field[c.i, c.j] as Path;
+                p.Checked = true;
                 // Add adjacent elements
-                if(IsSuitable(c.i + 1, c.j, true)) {
+                if(IsSuitable(c.i + 1, c.j, true) &&
+                    !((Path)field[c.i + 1, c.j]).Checked) {
                     queue.Enqueue(new Coords(c.i + 1, c.j));
                 }
-                if(IsSuitable(c.i - 1, c.j, true)) {
+                if(IsSuitable(c.i - 1, c.j, true) &&
+                    !((Path)field[c.i - 1, c.j]).Checked) {
                     queue.Enqueue(new Coords(c.i - 1, c.j));
                 }
-                if(IsSuitable(c.i, c.j + 1, true)) {
+                if(IsSuitable(c.i, c.j + 1, true) &&
+                    !((Path)field[c.i, c.j + 1]).Checked) {
                     queue.Enqueue(new Coords(c.i, c.j + 1));
                 }
-                if(IsSuitable(c.i, c.j - 1, true)) {
+                if(IsSuitable(c.i, c.j - 1, true)  &&
+                    !((Path)field[c.i, c.j - 1]).Checked) {
                     queue.Enqueue(new Coords(c.i, c.j - 1));
                 }
             }
@@ -233,6 +274,16 @@ namespace Mined_Out {
                 }
                 Console.WriteLine();
             }
+        }
+
+        public void ReplacePlayer(Coords c) {
+            if(this.player != null)
+                playerCell.PlayerLeft();
+            this.player = new Player(c.i, c.j);
+            if(field[c.i, c.j] is Wall) {
+                field[c.i, c.j] = new Path();
+            }
+            ((Path)field[c.i, c.j]).PlayerEntered();
         }
 
         public Event Move(Direction direction, int playerNumber = 1) {
@@ -297,6 +348,39 @@ namespace Mined_Out {
                     break;
             }
             return PlayerDidMove(playerNumber);
+        }
+
+        public void Expose() {
+            foreach(Cell c in field) {
+                Path p = c as Path;
+                if(p != null) {
+                    p.Expose();
+                }
+            }
+        }
+
+        public void Hide() {
+            foreach(Cell c in field) {
+                Path p = c as Path;
+                if(p != null) {
+                    p.Hide();
+                }
+            }
+        }
+
+        public void ClearCell(Coords c) {
+            Path p = field[c.i, c.j] as Path;
+            if(p != null && p.IsPlayerHere) {
+                this.player = null;
+            }
+            field[c.i, c.j] = new Path();
+        }
+
+        public bool IsInField(int i, int j) {
+            if(i < 1 || j < 0) return false;
+            if(i >= field.GetLength(0) || j >= field.GetLength(1))
+                return false;
+            return true;
         }
 
         protected Event PlayerDidMove(int playerNumber = 1) {

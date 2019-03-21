@@ -4,6 +4,7 @@ namespace Mined_Out {
             isMined = value;
         } get {return isMined;}}
         private bool isMined;
+        public bool Checked = false;
         private InventoryItem item = null;
         public bool ContainsItem {get {
             return item != null;
@@ -12,7 +13,6 @@ namespace Mined_Out {
         public bool IsPlayerHere {private set; get;}
         private bool isProtected;
         public int PlayerNumber {private set; get;}
-        public bool IsSelected {private set; get;}
         public bool IsExposed {private set; get;}
         public bool IsProtected {set {
             this.isProtected = value;
@@ -47,6 +47,18 @@ namespace Mined_Out {
                 if(!IsPlayerHere) {
                     this.Icon = '.';
                 }
+            } else {
+                this.Icon = '✘';
+            }
+        }
+        public void Hide() {
+            this.IsExposed = false;
+            if(!IsPlayerHere && item == null) {
+                this.Icon = ' ';
+                this.IsVisited = false;
+            }
+            if(item != null) {
+                this.IsVisited = false;
             }
         }
 
@@ -71,11 +83,11 @@ namespace Mined_Out {
             this.Icon = item.Icon;
         }
 
-        public void Select() {
+        override public void Select() {
             this.IsSelected = true;
         }
         
-        public void Unselect() {
+        override public void Unselect() {
             this.IsSelected = false;
         }
     }

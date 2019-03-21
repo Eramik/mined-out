@@ -3,5 +3,13 @@ namespace Mined_Out {
         public Wall() {
             this.Icon = '#';
         }
+
+        override public void Select() {
+            this.IsSelected = true;
+        }
+        
+        override public void Unselect() {
+            this.IsSelected = false;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace Mined_Out {
             return field;
         }
 
-        private static Field PreGenerateField(int height, int width, Inventory inv, bool twoPlayers = false) {
+        public static Field PreGenerateField(int height, int width, Inventory inv, bool twoPlayers = false) {
             if(twoPlayers && width % 2 == 1) {
                 throw new Exception("Width of the game field has to be even");
             }
