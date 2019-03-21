@@ -35,7 +35,7 @@ namespace Mined_Out {
             while(true) {
                 var consoleKey = Console.ReadKey(true);
                 ConsoleKey key = consoleKey.Key;
-                Direction d;
+                Direction d = Direction.Up;
 
                 if(key == ConsoleKey.DownArrow ||
                     key == ConsoleKey.S) {
@@ -75,6 +75,18 @@ namespace Mined_Out {
                         field[c.i, c.j].Unselect();
                     } catch(Exception e) {}
                     continue;
+                } else if(key == ConsoleKey.E) {
+                    Event r = field.Emulate();
+                    if (r == Event.Boom) {
+                        Console.Clear();
+                        Print.CustomLine("YOU DIED!", ConsoleColor.Red);
+                        return;
+                    }
+                    if (r == Event.Finished) {
+                        Console.Clear();
+                        Print.CustomLine("$$$ YOU WON $$$", ConsoleColor.Green);
+                        return;
+                    }
                 } else {
                     continue;
                 }
@@ -164,6 +176,7 @@ namespace Mined_Out {
             Press ESC to enter game menu
             Press C when in game to check if the level is winnable
             Press H to get a hint
+            Press E to emulate playing the level
             
             In two player mode:
             Player 1 uses WASD

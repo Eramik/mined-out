@@ -317,6 +317,54 @@ namespace Mined_Out {
             }
             throw new Exception("Hint not found");
         }
+
+        public Event Emulate() {
+            Random rnd = new Random();
+            Direction[] directions = new Direction[4];
+            directions[0] = Direction.Down;
+            directions[1] = Direction.Left;
+            directions[2] = Direction.Right;
+            directions[3] = Direction.Up;
+            int playerNumber;
+            while(true) {
+                if(this.player == null) {
+                    playerNumber = 2;
+                } else {
+                    playerNumber = 1;
+                }
+                this.PrintToConsole();
+                System.Threading.Thread.Sleep(500);
+                if(player == null && player2 == null) {
+                    return Event.Boom;
+                }
+                if(rnd.Next(100) < 40) {
+                    var e = this.Move(directions[rnd.Next(4)], playerNumber);
+                    if(e == Event.Boom || e == Event.Finished) {
+                        return e;
+                    }
+                    continue;
+                }
+                Direction d = GetDirectionTo(GetHint());
+                var e2 = this.Move(d, playerNumber);
+                if(e2 == Event.Boom || e2 == Event.Finished) {
+                    return e2;
+                }
+            }
+        }
+
+        private Direction GetDirectionTo(Coords c) {
+            var cc = PlayerCoords;
+            if(cc.i + 1 == c.i) {
+                return Direction.Down;
+            }
+            if(cc.i - 1 == c.i) {
+                return Direction.Up;
+            }
+            if(cc.j + 1 == c.j) {
+                return Direction.Right;
+            }
+            return Direction.Left;
+        }
         public bool CheckIsWinnable() {
             Queue<Coords> queue = new Queue<Coords>();
             queue.Enqueue(PlayerCoords);
